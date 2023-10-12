@@ -75,8 +75,10 @@ func (c *Client) DialContext(ctx context.Context, network string, destination M.
 	}
 
 	for key, valueList := range c.headers {
-		if key == "baiduDirect" && valueList[0] == "true" {
+		if key == "Baidu-Direct" && valueList[0] == "true" {
 			HeaderString = "CONNECT " + URL + "HTTP/1.1\r\n"
+		} else if key == "With-At" && valueList[0] != "" {
+			HeaderString = "CONNECT " + URL + "@" + valueList[0] + " HTTP/1.1\r\n"
 		} else {
 			tempHeaders[key] = valueList
 		}
