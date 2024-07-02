@@ -20,6 +20,7 @@ type PayloadDialer interface {
 type ParallelDialer interface {
 	Dialer
 	DialParallel(ctx context.Context, network string, destination M.Socksaddr, destinationAddresses []netip.Addr) (net.Conn, error)
+	DialParallelWithArr(ctx context.Context, network string, destination M.Socksaddr, destinationAddresses []netip.Addr) (net.Conn, netip.Addr, error)
 }
 
 var SystemDialer ParallelDialer = &DefaultDialer{}
@@ -39,4 +40,8 @@ func (d *DefaultDialer) ListenPacket(ctx context.Context, destination M.Socksadd
 
 func (d *DefaultDialer) DialParallel(ctx context.Context, network string, destination M.Socksaddr, destinationAddresses []netip.Addr) (net.Conn, error) {
 	return DialParallel(ctx, d, network, destination, destinationAddresses, false, 0)
+}
+
+func (d *DefaultDialer) DialParallelWithArr(ctx context.Context, network string, destination M.Socksaddr, destinationAddresses []netip.Addr) (net.Conn, netip.Addr, error) {
+	return DialParallelWithAddr(ctx, d, network, destination, destinationAddresses, false, 0)
 }
